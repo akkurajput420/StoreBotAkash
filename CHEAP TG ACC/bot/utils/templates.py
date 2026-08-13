@@ -64,3 +64,63 @@ def shop_account_label(a) -> str:
         country = getattr(a, 'country', 'Account')
         price = getattr(a, 'price', 0)
     return f"{country} - ₹{price}"
+
+
+def shop_header(balance: float = 0.0) -> str:
+    return (
+        f"<b>🛒 ACCOUNT STORE</b>\n{divider()}\n"
+        f"💰 <b>Your Balance:</b> ₹{balance:.2f}\n"
+        f"👇 <i>Select an account to view details/purchase:</i>"
+    )
+
+
+def account_preview(acc) -> str:
+    country = acc.get('country', 'N/A') if isinstance(acc, dict) else getattr(acc, 'country', 'N/A')
+    price = acc.get('price', 0) if isinstance(acc, dict) else getattr(acc, 'price', 0)
+    age = acc.get('age', 'N/A') if isinstance(acc, dict) else getattr(acc, 'age', 'N/A')
+    
+    return (
+        f"<b>📦 ACCOUNT DETAILS</b>\n{divider()}\n"
+        f"🌍 <b>Country:</b> {country}\n"
+        f"⏳ <b>Age:</b> {age}\n"
+        f"💵 <b>Price:</b> ₹{price:.2f}\n"
+        f"{divider()}\n"
+        "<i>Click below to confirm your purchase.</i>"
+    )
+
+
+def add_balance_menu(balance: float) -> str:
+    return (
+        f"<b>💰 RECHARGE WALLET</b>\n{divider()}\n"
+        f"Current Balance: <b>₹{balance:.2f}</b>\n\n"
+        "Enter amount or choose quick payment option."
+    )
+
+
+def insufficient_balance(price: float, balance: float) -> str:
+    shortfall = price - balance
+    return (
+        f"<b>⚠️ INSUFFICIENT BALANCE</b>\n{divider()}\n"
+        f"Item Price: ₹{price:.2f}\n"
+        f"Your Balance: ₹{balance:.2f}\n"
+        f"Required: <b>₹{shortfall:.2f}</b>\n\n"
+        "Please recharge your wallet to proceed."
+    )
+
+
+def purchase_success(acc_id: str, details: str = "") -> str:
+    return (
+        f"<b>🎉 PURCHASE SUCCESSFUL!</b>\n{divider()}\n"
+        f"📦 Order ID: <code>{acc_id}</code>\n"
+        f"{details}\n"
+        "Thank you for buying with us!"
+    )
+
+
+def stats_panel(users: int = 0, sales: float = 0.0, stock: int = 0) -> str:
+    return (
+        f"<b>📊 SYSTEM ANALYTICS</b>\n{divider()}\n"
+        f"👥 Total Users: <b>{users}</b>\n"
+        f"💰 Total Sales: <b>₹{sales:.2f}</b>\n"
+        f"📦 Live Stock: <b>{stock}</b>"
+    )
