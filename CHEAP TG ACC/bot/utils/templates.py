@@ -1,86 +1,56 @@
 from bot.constants import VIP_LEVELS
 
-def divider():
+
+def divider() -> str:
     return "━━━━━━━━━━━━━━━━━━━━━━"
 
-def welcome_user():
+
+def welcome_user() -> str:
     bar = divider()
     return (
         f"<b>✨ Welcome to TelegramAcc Seller ✨</b>\n{bar}\n\n"
         "🚀 Premium Telegram Account Marketplace\n"
         "⚡ Instant Delivery System\n"
-        "🔐 Safe • Fast • Automated\n"
-        "📩 Auto OTP Forwarding\n"
+        "🔐 Safe • Fast • Automated Auto-Pay\n"
         "💎 High Quality Accounts\n\n"
         f"{bar}\n"
-        "🛒 Buy Accounts in One Click\n"
-        "💰 Secure Wallet System\n"
-        "🔥 Smooth & Fast Experience\n"
-        f"{bar}\n\n"
-        "🔹 <i>Use the buttons below to continue.</i>"
+        "🔹 <i>Select an option below to proceed.</i>"
     )
 
-def welcome_owner():
-    return f"<b>👋 Admin Dashboard</b>\n{divider()}\nReady."
 
-def loading(t="Processing"):
-    return f"<b>{t}</b>\n{divider()}\n<code>◐ ◓ ◑ ◒</code>"
+def seller_dashboard(total_sales: float, total_orders: int, stock_count: int) -> str:
+    return (
+        f"<b>🏪 SELLER DASHBOARD</b>\n{divider()}\n"
+        f"💰 <b>Total Sales:</b> ₹{total_sales:.2f}\n"
+        f"📦 <b>Completed Orders:</b> {total_orders}\n"
+        f"📈 <b>Live Stock:</b> {stock_count} Accounts Available\n"
+        f"{divider()}\n"
+        "<i>Use admin panel options to manage stock & pricing.</i>"
+    )
 
-def success(t,b): return f"<b>✅ {t}</b>\n{divider()}\n{b}"
-def error(t,b): return f"<b>❌ {t}</b>\n{divider()}\n{b}"
-def warn(t,b): return f"<b>⚠️ {t}</b>\n{divider()}\n{b}"
 
-def vip_rank(bal):
-    r=VIP_LEVELS[0][1]
-    for th,n in VIP_LEVELS:
-        if bal>=th: r=n
-    return r
+def payment_order(order_id: str, amount: float, upi_id: str, upi_link: str = "", amount_note: str = "") -> str:
+    link_html = f'🔗 <a href="{upi_link}"><b>Click Here To Direct Pay</b></a>\n' if upi_link else ""
+    return (
+        f"<b>💳 AUTO PAYMENT SCANNER</b>\n{divider()}\n"
+        f"💵 <b>Paying Amount:</b> <code>₹{amount:.2f}</code>{amount_note}\n"
+        f"🧾 <b>Order ID:</b> <code>{order_id}</code>\n"
+        f"📲 <b>UPI ID:</b> <code>{upi_id}</code>\n"
+        f"{link_html}{divider()}\n"
+        "1️⃣ Scan the attached QR Code Image below\n"
+        "2️⃣ Pay exact amount (Auto-Set in Scanner)\n"
+        "3️⃣ Balance credits automatically upon payment completion!"
+    )
 
-def account_dashboard(uid,bal,vip,n):
-    return (f"<b>👤 Account</b>\n{divider()}\n"
-            f"🆔 <code>{uid}</code>\n💰 <b>{bal:.2f} INR</b>\n🏅 {vip}\n🛒 {n} purchases")
 
-def shop_header(stock,page):
-    return f"<b>🛒 Available Accounts</b>\n{divider()}\n📦 <code>{stock}</code> | Page {page+1}"
+def payment_success(amount: float, order_id: str, balance: float) -> str:
+    return (
+        f"<b>✅ PAYMENT CONFIRMED!</b>\n{divider()}\n"
+        f"➕ Credited: <b>+₹{amount:.2f} INR</b>\n"
+        f"🧾 Order ID: <code>{order_id}</code>\n"
+        f"💰 Current Wallet Balance: <b>₹{balance:.2f} INR</b>"
+    )
 
-def shop_account_label(acc):
-    from bot.utils.country import _flag
-    f=_flag(acc.get("country_code","XX"))
-    return f"{f} {acc.get('country_name','?')} • {acc.get('account_age','—')} — ₹{float(acc['price']):.0f}"
 
-def account_preview(acc, blurred):
-    from bot.utils.country import _flag
-    f=_flag(acc.get("country_code","XX"))
-    spam="✅ Spam Free" if acc.get("spam_free") in (1,True) else "⚠️ Limits may apply"
-    return (f"<b>📋 Preview</b>\n{divider()}\n"
-            f"🌍 {f} {acc.get('country_name')}\n📅 {acc.get('account_age')}\n"
-            f"📱 <code>{blurred}</code>\n🛡️ {spam}\n💵 <b>{float(acc['price']):.2f} INR</b>\n"
-            f"{divider()}\n<i>Confirm to pay & reveal number.</i>")
-
-def purchase_success(phone, acc=None):
-    extra=""
-    if acc:
-        from bot.utils.country import _flag
-        extra=f"\n🌍 {_flag(acc.get('country_code'))} {acc.get('country_name')}"
-    return (f"<b>🎉 Purchased!</b>\n{divider()}\n📱 <code>{phone}</code>{extra}\n"
-            "Tap <b>Get OTP</b> for codes.")
-
-def insufficient_balance(bal, price, short):
-    return (f"<b>❌ Low Balance</b>\n{divider()}\n💰 {bal:.2f} | Need {price:.2f}\n"
-            f"📉 Add <b>{short:.2f} INR</b> more")
-
-def add_balance_menu(bal):
-    return f"<b>💰 Add Balance</b>\n{divider()}\nBalance: <code>{bal:.2f} INR</code>\nSelect amount:"
-
-def payment_order(order_id, amount, upi_id, upi_link, amount_note=""):
-    link=f'<a href="{upi_link}">Open UPI App</a>\n' if upi_link else ""
-    return (f"<b>💳 UPI Payment</b>\n{divider()}\n"
-            f"💵 <b>{amount:.2f} INR</b>{amount_note}\n🧾 <code>{order_id}</code>\n"
-            f"📲 <code>{upi_id}</code>\n{link}{divider()}\n"
-            "1️⃣ Scan QR below\n2️⃣ Pay exact via any UPI app\n3️⃣ Tap <b>I've Paid — Check</b>")
-
-def payment_success(amount, order_id, balance, paid_by=""):
-    return f"<b>✅ Paid!</b>\n+{amount:.2f} INR\nBalance: <b>{balance:.2f}</b>"
-
-def stats_panel(u,s,e,d):
-    return f"<b>📊 Stats</b>\n{divider()}\n👥 {u}\n📦 {s}"
+def error(title: str, body: str) -> str:
+    return f"<b>❌ {title}</b>\n{divider()}\n{body}"
