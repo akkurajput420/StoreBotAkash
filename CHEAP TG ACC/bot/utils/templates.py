@@ -29,6 +29,28 @@ def welcome_owner() -> str:
     )
 
 
+def account_dashboard(user_id: int, balance: float = 0.0, total_spent: float = 0.0) -> str:
+    return (
+        f"<b>👤 YOUR ACCOUNT PROFILE</b>\n{divider()}\n"
+        f"🆔 <b>User ID:</b> <code>{user_id}</code>\n"
+        f"💰 <b>Wallet Balance:</b> ₹{balance:.2f}\n"
+        f"🛒 <b>Total Spent:</b> ₹{total_spent:.2f}\n"
+        f"{divider()}\n"
+        "<i>Use the menu below to manage your wallet and purchases.</i>"
+    )
+
+
+def vip_rank(total_spent: float = 0.0) -> str:
+    rank = "BRONZE 🥉"
+    if total_spent >= 5000:
+        rank = "DIAMOND 💎"
+    elif total_spent >= 2000:
+        rank = "GOLD 🥇"
+    elif total_spent >= 500:
+        rank = "SILVER 🥈"
+    return f"<b>🌟 VIP Level:</b> {rank}"
+
+
 def seller_dashboard(total_sales: float, total_orders: int, stock_count: int) -> str:
     return (
         f"<b>🏪 SELLER DASHBOARD</b>\n{divider()}\n"
@@ -143,3 +165,4 @@ def stats_panel(users: int = 0, sales: float = 0.0, stock: int = 0) -> str:
         f"💰 Total Sales: <b>₹{sales:.2f}</b>\n"
         f"📦 Live Stock: <b>{stock}</b>"
     )
+EOF
