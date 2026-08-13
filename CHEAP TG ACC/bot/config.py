@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
-from typing import Annotated
+from typing import List
 
-from pydantic import Field, PositiveFloat, PositiveInt
+from pydantic import Field, PositiveFloat, PositiveInt, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,8 +21,9 @@ class Settings(BaseSettings):
     api_id: int = Field(..., alias="API_ID")
     api_hash: str = Field(..., alias="API_HASH")
     owner_id: int = Field(..., alias="OWNER_ID")
+    admin_ids: List[int] = Field(default_factory=list, alias="ADMIN_IDS")
 
-    # Database & Storage
+    # Storage Paths
     database_url: str = Field(default="sqlite:///bot_database.db", alias="DATABASE_URL")
     bot_session_name: str = Field(default="store_bot", alias="BOT_SESSION_NAME")
     sessions_dir: Path = Field(default=Path("MyTelethon"), alias="SESSIONS_DIR")
@@ -33,12 +34,13 @@ class Settings(BaseSettings):
     otp_listener_timeout: PositiveInt = Field(default=900, alias="OTP_LISTENER_TIMEOUT")
     rate_limit_per_minute: PositiveInt = Field(default=30, alias="RATE_LIMIT_PER_MINUTE")
 
-    # Payment Gateway Configuration (FamPay)
+    # Payment Gateway Configuration (FamPay & Scanner)
     fampay_api_base_url: str = Field(default="http://payment.openosint.in/api/", alias="FAMPAY_API_BASE_URL")
     fampay_upi_id: str = Field(default="raresharmaji@fam", alias="FAMPAY_UPI_ID")
+    custom_qr_image_path: str = Field(default="scanner.jpg", alias="CUSTOM_QR_IMAGE_PATH")
     payment_min_amount: PositiveFloat = Field(default=1.0, alias="PAYMENT_MIN_AMOUNT")
     payment_max_amount: PositiveFloat = Field(default=50000.0, alias="PAYMENT_MAX_AMOUNT")
-    payment_poll_interval: PositiveInt = Field(default=7, alias="PAYMENT_POLL_INTERVAL")
+    payment_poll_interval: PositiveInt = Field(default=5, alias="PAYMENT_POLL_INTERVAL")
     payment_poll_timeout: PositiveInt = Field(default=900, alias="PAYMENT_POLL_TIMEOUT")
 
     # Store Branding & Info
@@ -46,6 +48,21 @@ class Settings(BaseSettings):
     account_bio: str = Field(default="@TgEliteStoreBot", alias="ACCOUNT_BIO")
     required_channel_link: str = Field(default="https://t.me/Tg_Buyer_Seller", alias="REQUIRED_CHANNEL_LINK")
     spambot_username: str = Field(default="SpamBot", alias="SPAMBOT_USERNAME")
+
+    @field_validator("admin_ids", mode="before")
+    def parse_admin_ids(cls, v):
+        """Converts comma-separated string from .env into list of integers."""
+        if isinstance(v, str):
+            v = v.strip()
+            if not v:
+                return []
+            return [int(x.strip()) for x in v.split(",") if x.strip().isdigit()]
+        return v
+
+    @property
+    def all_admin_ids(self) -> set[int]:
+        """Returns set of all authorized admin IDs including owner."""
+        return {self.owner_id, *self.admin_ids}
 
     @property
     def sqlite_path(self) -> str:
