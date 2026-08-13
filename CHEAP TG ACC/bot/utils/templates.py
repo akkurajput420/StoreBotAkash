@@ -18,6 +18,17 @@ def welcome_user() -> str:
     )
 
 
+def welcome_owner() -> str:
+    bar = divider()
+    return (
+        f"<b>👑 Welcome Owner / Admin! ✨</b>\n{bar}\n\n"
+        "🚀 Premium Telegram Account Marketplace - Admin Control Panel\n"
+        "⚙️ Full Control & Automated Auto-Pay Active\n\n"
+        f"{bar}\n"
+        "👑 <i>Select an admin option below to manage the store.</i>"
+    )
+
+
 def seller_dashboard(total_sales: float, total_orders: int, stock_count: int) -> str:
     return (
         f"<b>🏪 SELLER DASHBOARD</b>\n{divider()}\n"
