@@ -54,3 +54,14 @@ def payment_success(amount: float, order_id: str, balance: float) -> str:
 
 def error(title: str, body: str) -> str:
     return f"<b>❌ {title}</b>\n{divider()}\n{body}"
+
+
+# Fix: Missing function added below
+def shop_account_label(a: dict | object) -> str:
+    if isinstance(a, dict):
+        country = a.get('country', 'Account')
+        price = a.get('price', 0)
+    else:
+        country = getattr(a, 'country', 'Account')
+        price = getattr(a, 'price', 0)
+    return f"{country} - ₹{price}"
