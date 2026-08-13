@@ -1,3 +1,4 @@
+cat << 'EOF' > bot/utils/templates.py
 from bot.constants import VIP_LEVELS
 
 
