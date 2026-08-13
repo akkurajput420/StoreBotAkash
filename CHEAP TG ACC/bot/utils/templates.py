@@ -56,8 +56,7 @@ def error(title: str, body: str) -> str:
     return f"<b>❌ {title}</b>\n{divider()}\n{body}"
 
 
-# Fix: Missing function added below
-def shop_account_label(a: dict | object) -> str:
+def shop_account_label(a) -> str:
     if isinstance(a, dict):
         country = a.get('country', 'Account')
         price = a.get('price', 0)
