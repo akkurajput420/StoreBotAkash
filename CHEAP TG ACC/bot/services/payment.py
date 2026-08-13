@@ -9,7 +9,7 @@ def payment_action_buttons(oid, pending=None):
              Button.inline("❌ Cancel", f"paycan_{o}")]]
 
 def add_balance_amount_buttons(pending_acc_id=None, suggested=None):
-    amounts=[50,100,200,500,1000]
+    amounts=[25,50,100,200,500]
     if suggested and int(suggested) not in amounts:
         amounts=[int(suggested)]+amounts[:4]
     btns,r=[],[]
