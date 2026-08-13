@@ -1,14 +1,9 @@
 from telethon import Button
 from bot.constants import ACCOUNTS_PER_PAGE, ACCOUNT_AGES
-
-# Helper function to generate account label button text
-def shop_account_label(a):
-    country = a.get('country', 'Account') if isinstance(a, dict) else getattr(a, 'country', 'Account')
-    price = a.get('price', 0) if isinstance(a, dict) else getattr(a, 'price', 0)
-    return f"{country} - ₹{price}"
+from bot.utils.templates import shop_account_label
 
 def account_list_buttons(accounts, page, has_more, category=""):
-    btns = [[Button.inline(shop_account_label(a), f"buy_{a['id']}")] for a in accounts]
+    btns = [[Button.inline(shop_account_label(a), f"buy_{a['id'] if isinstance(a, dict) else getattr(a, 'id')}")] for a in accounts]
     nav = []
     if page > 0: nav.append(Button.inline("⬅️", f"page_{page-1}_{category}"))
     if has_more: nav.append(Button.inline("➡️", f"page_{page+1}_{category}"))
