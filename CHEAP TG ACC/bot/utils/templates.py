@@ -56,6 +56,14 @@ def error(title: str, body: str) -> str:
     return f"<b>❌ {title}</b>\n{divider()}\n{body}"
 
 
+def success(title: str, body: str) -> str:
+    return f"<b>✅ {title}</b>\n{divider()}\n{body}"
+
+
+def loading(text: str = "Processing...") -> str:
+    return f"<b>⏳ {text}</b>"
+
+
 def shop_account_label(a) -> str:
     if isinstance(a, dict):
         country = a.get('country', 'Account')
